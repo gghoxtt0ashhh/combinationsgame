@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Histórico de Combinações</title>
+  <link rel="stylesheet" href="historico.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Histórico de Combinações</h1>
+    <div id="history"></div>
+    <div class="buttons">
+      <a href="index.html"><button>Voltar ao jogo</button></a>
+      <button id="clear-history">Limpar histórico</button>
+    </div><!-- butons -->
+  </div><!-- container -->
+  <script>
+    const historyDiv = document.getElementById('history');
+    const saved = JSON.parse(localStorage.getItem('combinations')) || [];
+
+    if (saved.length === 0) {
+      historyDiv.innerHTML = "<p>Nenhuma combinação salva ainda.</p>";
+    } else {
+      saved.forEach((combo, i) => {
+        const div = document.createElement('div');
+        div.className = 'combination';
+
+        const title = document.createElement('p');
+        title.textContent = `Combinação ${i + 1}:`;
+        div.appendChild(title);
+
+        const fruitsContainer = document.createElement('div');
+        fruitsContainer.className = 'fruits-container';
+
+        combo.forEach(fruit => {
+          const fruitDiv = document.createElement('div');
+          fruitDiv.className = 'fruit';
+
+          const img = document.createElement('img');
+          img.src = fruit.image;
+          img.alt = fruit.name;
+          img.className = 'fruit-img';
+
+          fruitDiv.appendChild(img);
+          fruitsContainer.appendChild(fruitDiv);
+        });
+
+        div.appendChild(fruitsContainer);
+        historyDiv.appendChild(div);
+      });
+    }
+
+    document.getElementById('clear-history').addEventListener('click', () => {
+      if (confirm("Tem certeza que deseja apagar o histórico?")) {
+        localStorage.removeItem('combinations');
+        location.reload(); // recarrega a página para atualizar a visualização
+      }
+    });
+
+  </script>
+</body>
+
+</html>
